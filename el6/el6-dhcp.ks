@@ -2,13 +2,13 @@
 #version=<VERSION>
 
 install
-url  --url http://1.2.3.4/CentOS
+url --url http://mirror.centos.org/centos/6/os/x86_64
 lang en_US.UTF-8
 keyboard us
 #text
 cmdline
-network --onboot yes --device eth0 --bootproto dhcp --noipv6 --hostname centos-template.your.domain
-rootpw  --iscrypted <encrypted password>
+network --onboot yes --device eth0 --bootproto dhcp --noipv6 --hostname centostemplate.example.com
+rootpw password
 firewall --service=ssh
 authconfig --enableshadow --passalgo=sha512
 selinux --enforcing
@@ -28,7 +28,7 @@ logvol swap --name=lv_swap --vgname=vg_template --size=4096
 logvol /usr --fstype=ext4 --name=lv_usr --vgname=vg_template --size=15000
 logvol /var --fstype=ext4 --name=lv_var --vgname=vg_template --size=15000
 
-repo --name="CentOS"  --baseurl=http://1.2.3.4/CentOS --cost=100
+repo --name="base" --baseurl=http://mirror.centos.org/centos/6/os/x86_64 --cost=100
 
 %packages --nobase
 @core
@@ -97,20 +97,12 @@ sed -i '/^MTU/d' /etc/sysconfig/network-scripts/ifcfg-eth0
 sed -i '/^UUID/d' /etc/sysconfig/network-scripts/ifcfg-eth0
 sed -i '/^NAME/d' /etc/sysconfig/network-scripts/ifcfg-eth0
 
-mkdir /root/postinstall
-cd /root/postinstall
-wget http://1.2.3.4/vmwaretools.tgz
-tar -xzvf vmwaretools.tgz
-cd vmware-tools-distrib/
-./vmware-install.pl -d  --clobber-kernel-modules=vmmemctl,vmxnet3,pvscsi
-cd /root/postinstall
-rm -rf ./vmware-tools-distrib
-rm -rf vmwaretools.tgz
-wget http://1.2.3.4/issue
+wget http://kickstart/issue
 \cp -f issue /etc/issue
 \cp -f /etc/issue /etc/issue.net
 rm -rf ./issue 
 echo "Banner /etc/issue.net" >> /etc/ssh/sshd_config
+
 postconf -e relayhost=smtp.your.domain
 
 %end
