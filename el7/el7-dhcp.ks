@@ -83,20 +83,6 @@ yum -y update
 
 chkconfig ntpd on
 
-mkdir /lib/udev/rules.d/disabled
-mv /lib/udev/rules.d/75-persistent-net-generator.rules /lib/udev/rules.d/disabled
-mv /lib/udev/rules.d/75-cd-aliases-generator.rules /lib/udev/rules.d/disabled
-rm -f /etc/udev/rules.d/*persistent*
-echo "mv /lib/udev/rules.d/75-persistent-net-generator.rules /lib/udev/rules.d/disabled" >> /etc/rc.local
-echo "mv /lib/udev/rules.d/75-cd-aliases-generator.rules /lib/udev/rules.d/disabled" >> /etc/rc.local
-echo "rm -f /etc/udev/rules.d/*persistent*" >> /etc/rc.local
-
-sed -i '/^NM_CONTROLLED/d' /etc/sysconfig/network-scripts/ifcfg-eth0
-sed -i '/^HWADDR/d' /etc/sysconfig/network-scripts/ifcfg-eth0
-sed -i '/^MTU/d' /etc/sysconfig/network-scripts/ifcfg-eth0
-sed -i '/^UUID/d' /etc/sysconfig/network-scripts/ifcfg-eth0
-sed -i '/^NAME/d' /etc/sysconfig/network-scripts/ifcfg-eth0
-
 %end
 
 reboot
